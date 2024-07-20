@@ -36,12 +36,8 @@ public class MessageService {
      * @return the created message
      */
     public Message createMessage(Message message) {
-        System.out.println("Creating message: " + message);
-        System.out.println("Posted by: " + message.getPostedBy().longValue());
-        if (message.getPostedBy() == null) {
-            throw new IllegalArgumentException("Posted by must be provided");
-        }
-        if (message.getMessageText().isBlank() || message.getMessageText().length() > 255) {
+        if (message.getPostedBy() == null || message.getMessageText().isBlank()
+                || message.getMessageText().length() > 255) {
             throw new IllegalArgumentException("Message text cannot be blank and must be under 255 characters");
         }
         if (!accountRepository.existsById(message.getPostedBy())) {
@@ -57,5 +53,59 @@ public class MessageService {
      */
     public List<Message> getAllMessages() {
         return messageRepository.findAll();
+    }
+
+    /**
+     * Gets a message by its id.
+     * 
+     * @param messageId the message id
+     * @return the message with the given id
+     */
+    public Message getMessageById(int messageId) {
+        return messageRepository.findById(messageId).orElse(null);
+    }
+
+    /**
+     * Deletes a message by its id.
+     * 
+     * @param messageId the message id
+     * @return true if the message was deleted, false if the message did not exist
+     */
+    public boolean deleteMessageById(int messageId) {
+        if (messageRepository.existsById(messageId)) {
+            messageRepository.deleteById(messageId);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Updates a message with the given id to have the given text.
+     * 
+     * @param messageId   the message id
+     * @param messageText the new message text
+     * @return the updated message
+     * @throws IllegalArgumentException if the message text is blank or too long
+     */
+    public Message updateMessage(int messageId, String messageText) {
+        if (messageText == null || messageText.isBlank() || messageText.length() > 255) {
+            throw new IllegalArgumentException("Message text cannot be blank and must be under 255 characters");
+        }
+        Message existingMessage = messageRepository.findById(messageId).orElse(null);
+        if (existingMessage != null) {
+            existingMessage.setMessageText(messageText);
+            return messageRepository.save(existingMessage);
+        }
+        return null;
+    }
+
+    /**
+     * Gets all messages by a specific user.
+     * 
+     * @param userId the user id
+     * @return a list of all messages by the user
+     */
+    public List<Message> getMessagesByUserId(int userId) {
+        return messageRepository.findByPostedBy(userId);
     }
 }
