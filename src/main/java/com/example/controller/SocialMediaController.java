@@ -1,6 +1,9 @@
 package com.example.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,5 +71,16 @@ public class SocialMediaController {
     public ResponseEntity<?> createMessage(@RequestBody Message message) {
         Message createdMessage = messageService.createMessage(message);
         return ResponseEntity.ok(createdMessage);
+    }
+
+    /**
+     * Gets all messages.
+     * 
+     * @return a list of all messages
+     */
+    @GetMapping("/messages")
+    public ResponseEntity<List<Message>> getAllMessages() {
+        List<Message> messages = messageService.getAllMessages();
+        return ResponseEntity.ok(messages);
     }
 }

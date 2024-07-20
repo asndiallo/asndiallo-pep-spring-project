@@ -1,5 +1,7 @@
 package com.example.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.entity.Message;
@@ -46,5 +48,14 @@ public class MessageService {
             throw new IllegalArgumentException("Posted by must refer to an existing user");
         }
         return messageRepository.save(message);
+    }
+
+    /**
+     * Gets all messages.
+     * 
+     * @return a list of all messages
+     */
+    public List<Message> getAllMessages() {
+        return messageRepository.findAll();
     }
 }
