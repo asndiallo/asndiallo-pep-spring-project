@@ -43,4 +43,20 @@ public class AccountService {
         }
         return accountRepository.save(account);
     }
+
+    /**
+     * Logs in an account with the given username and password.
+     * 
+     * @param username the username
+     * @param password the password
+     * @return the logged in account
+     * @throws IllegalArgumentException if the username or password is incorrect
+     */
+    public Account login(String username, String password) {
+        Account account = accountRepository.findByUsername(username);
+        if (account == null || !account.getPassword().equals(password)) {
+            throw new IllegalArgumentException("Invalid username or password");
+        }
+        return account;
+    }
 }

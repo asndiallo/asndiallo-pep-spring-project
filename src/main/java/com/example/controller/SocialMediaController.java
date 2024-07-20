@@ -36,4 +36,20 @@ public class SocialMediaController {
         Account createdAccount = accountService.registerAccount(account);
         return ResponseEntity.ok(createdAccount);
     }
+
+    /**
+     * Logs in a user account.
+     * 
+     * @param account the account to log in
+     * @return the logged in account
+     */
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody Account account) {
+        try {
+            Account loggedInAccount = accountService.login(account.getUsername(), account.getPassword());
+            return ResponseEntity.ok(loggedInAccount);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
+    }
 }
