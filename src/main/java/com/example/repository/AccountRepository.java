@@ -7,6 +7,6 @@ import com.example.entity.Account;
 /**
  * repository interface for the Account entity to handle database operations.
  */
-public interface AccountRepository extends JpaRepository<Account, Long> {
+public interface AccountRepository extends JpaRepository<Account, Integer> {
     Account findByUsername(String username);
 }

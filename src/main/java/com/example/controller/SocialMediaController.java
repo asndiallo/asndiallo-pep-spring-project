@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Account;
+import com.example.entity.Message;
 import com.example.service.AccountService;
+import com.example.service.MessageService;
 
 /**
  * Controller class for social media functionality.
@@ -15,14 +17,17 @@ import com.example.service.AccountService;
 public class SocialMediaController {
 
     private final AccountService accountService;
+    private final MessageService messageService;
 
     /**
      * Constructs a new SocialMediaController with the given account service.
      * 
      * @param accountService the account service
+     * @param messageService the message service
      */
-    public SocialMediaController(AccountService accountService) {
+    public SocialMediaController(AccountService accountService, MessageService messageService) {
         this.accountService = accountService;
+        this.messageService = messageService;
     }
 
     /**
@@ -51,5 +56,17 @@ public class SocialMediaController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(401).body(e.getMessage());
         }
+    }
+
+    /**
+     * Creates a new message.
+     * 
+     * @param message the message to create
+     * @return the created message
+     */
+    @PostMapping("/messages")
+    public ResponseEntity<?> createMessage(@RequestBody Message message) {
+        Message createdMessage = messageService.createMessage(message);
+        return ResponseEntity.ok(createdMessage);
     }
 }
